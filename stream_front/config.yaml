@@ -1,0 +1,13 @@
+# Emby配置
+Emby:
+  url: "http://xxx:xxx/"
+  apikey: "xxx"
+
+# 播放端配置
+Remote:
+  url: "http://xxx:12180/stream"
+  apikey: "xxx"
+
+# 目录头配置
+Local: 
+  dir: "xxx"
