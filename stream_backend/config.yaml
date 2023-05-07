@@ -1,0 +1,7 @@
+# 播放端配置
+Remote:
+  apikey: "xxx"
+
+# 目录头配置
+Mount: 
+  dir: "xxx"
