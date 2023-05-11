@@ -87,7 +87,7 @@ nohup ./StreamFront ./config.yaml  > StreamFront.log 2>&1 &
 运行程序：
 
 ```
-nohup python3 /root/stream_front/main.py  > streampy.log 2>&1 &
+nohup python3 /root/stream_front/main_os.py  > streampy.log 2>&1 &
 ```
 
 ------
