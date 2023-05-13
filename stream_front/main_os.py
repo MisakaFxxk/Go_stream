@@ -12,14 +12,14 @@ app = flask.Flask(__name__)
 
 @app.route('/emby/videos/<item_Id>/stream.<type>',methods=["GET"])
 def handle_request(item_Id,type):
-    MediaSourceId = request.args.get("ParentId")
+    MediaSourceId = request.args.get("MediaSourceId")
     api_key = request.args.get("api_key")
 
     if api_key:
         # 非Infuse
         itemInfoUri = f"{emby_url}/Items/{item_Id}/PlaybackInfo?MediaSourceId={MediaSourceId}&api_key={api_key}"
         print(itemInfoUri)
-        emby_path = fetchEmbyFilePath(itemInfoUri)
+        emby_path = fetchEmbyFilePath(itemInfoUri,MediaSourceId)
 
         local = str(emby_path).replace(local_dir,"")
         raw_string = "dir=" + str(local) + "&MediaSourceId=" + str(MediaSourceId) + "&remote_token=" + str(remote_token)
@@ -30,7 +30,7 @@ def handle_request(item_Id,type):
     else:
         # Infuse
         itemInfoUri = f"{emby_url}/Items/{item_Id}/PlaybackInfo?MediaSourceId={MediaSourceId}&api_key={emby_key}"
-        emby_path = fetchEmbyFilePath(itemInfoUri)
+        emby_path = fetchEmbyFilePath(itemInfoUri,MediaSourceId)
 
         local = str(emby_path).replace(local_dir,"")
         raw_string = "dir=" + str(local) + "&MediaSourceId=" + str(MediaSourceId) + "&remote_token=" + str(remote_token)
@@ -41,13 +41,13 @@ def handle_request(item_Id,type):
 
 @app.route('/Videos/<item_Id>/stream',methods=["GET"])
 def handle_request2(item_Id):
-    MediaSourceId = request.args.get("ParentId")
+    MediaSourceId = request.args.get("MediaSourceId")
     api_key = request.args.get("api_key")
 
     if api_key:
         # 非Infuse
         itemInfoUri = f"{emby_url}/Items/{item_Id}/PlaybackInfo?MediaSourceId={MediaSourceId}&api_key={api_key}"
-        emby_path = fetchEmbyFilePath(itemInfoUri)
+        emby_path = fetchEmbyFilePath(itemInfoUri,MediaSourceId)
 
         local = str(emby_path).replace(local_dir,"")
         raw_string = "dir=" + str(local) + "&MediaSourceId=" + str(MediaSourceId) + "&remote_token=" + str(remote_token)
@@ -58,7 +58,7 @@ def handle_request2(item_Id):
     else:
         # Infuse
         itemInfoUri = f"{emby_url}/Items/{item_Id}/PlaybackInfo?MediaSourceId={MediaSourceId}&api_key={emby_key}"
-        emby_path = fetchEmbyFilePath(itemInfoUri)
+        emby_path = fetchEmbyFilePath(itemInfoUri,MediaSourceId)
 
         local = str(emby_path).replace(local_dir,"")
         raw_string = "dir=" + str(local) + "&MediaSourceId=" + str(MediaSourceId) + "&remote_token=" + str(remote_token)
@@ -69,12 +69,13 @@ def handle_request2(item_Id):
 
 
 
-def fetchEmbyFilePath(itemInfoUri):
+def fetchEmbyFilePath(itemInfoUri,MediaSourceId):
     # 获取Emby内文件路径
     req = requests.get(itemInfoUri)
     resjson = req.json()
-    mount_path = resjson["MediaSources"][0]["Path"]
-
+    for i in resjson['MediaSources']:
+        if i['Id'] == MediaSourceId:
+            mount_path = i['Path']
     return mount_path
 
 
