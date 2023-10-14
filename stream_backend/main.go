@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"os"
+    "net/url"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -23,7 +24,13 @@ func remote(c *gin.Context) {
 	hash := hex.EncodeToString(hash_1[:])
 	if key == hash {
 		// 鉴权成功
-		local_dir := mount_dir + dir
+		decodedDir, err := url.QueryUnescape(dir)
+		if err != nil {
+			fmt.Println("Error decoding the dir string:", err) 
+			c.AbortWithStatus(404)
+		}
+
+		local_dir := mount_dir + decodedDir
 		c.File(local_dir)
 	} else {
 		// 鉴权失败

@@ -1,6 +1,7 @@
 import flask,requests,hashlib
 from flask import request, redirect
 from flask_cors import CORS
+import urllib.parse
 
 emby_url = ""
 emby_key = ""
@@ -22,6 +23,7 @@ def handle_request(item_Id,type):
         emby_path = fetchEmbyFilePath(itemInfoUri,MediaSourceId)
 
         local = str(emby_path).replace(local_dir,"")
+        local = urllib.parse.quote(local) 
         raw_string = "dir=" + str(local) + "&MediaSourceId=" + str(MediaSourceId) + "&remote_token=" + str(remote_token)
         md5_verify = hashlib.md5((raw_string).encode(encoding='UTF-8')).hexdigest()
         raw_url = remote_api + "?dir=" + str(local) + "&MediaSourceId=" + str(MediaSourceId) + "&key=" + str(md5_verify)
@@ -33,6 +35,7 @@ def handle_request(item_Id,type):
         emby_path = fetchEmbyFilePath(itemInfoUri,MediaSourceId)
 
         local = str(emby_path).replace(local_dir,"")
+        local = urllib.parse.quote(local) 
         raw_string = "dir=" + str(local) + "&MediaSourceId=" + str(MediaSourceId) + "&remote_token=" + str(remote_token)
         md5_verify = hashlib.md5((raw_string).encode(encoding='UTF-8')).hexdigest()
         raw_url = remote_api + "?dir=" + str(local) + "&MediaSourceId=" + str(MediaSourceId) + "&key=" + str(md5_verify)
@@ -50,6 +53,7 @@ def handle_request2(item_Id):
         emby_path = fetchEmbyFilePath(itemInfoUri,MediaSourceId)
 
         local = str(emby_path).replace(local_dir,"")
+        local = urllib.parse.quote(local) 
         raw_string = "dir=" + str(local) + "&MediaSourceId=" + str(MediaSourceId) + "&remote_token=" + str(remote_token)
         md5_verify = hashlib.md5((raw_string).encode(encoding='UTF-8')).hexdigest()
         raw_url = remote_api + "?dir=" + str(local) + "&MediaSourceId=" + str(MediaSourceId) + "&key=" + str(md5_verify)
@@ -61,6 +65,7 @@ def handle_request2(item_Id):
         emby_path = fetchEmbyFilePath(itemInfoUri,MediaSourceId)
 
         local = str(emby_path).replace(local_dir,"")
+        local = urllib.parse.quote(local) 
         raw_string = "dir=" + str(local) + "&MediaSourceId=" + str(MediaSourceId) + "&remote_token=" + str(remote_token)
         md5_verify = hashlib.md5((raw_string).encode(encoding='UTF-8')).hexdigest()
         raw_url = remote_api + "?dir=" + str(local) + "&MediaSourceId=" + str(MediaSourceId) + "&key=" + str(md5_verify)
